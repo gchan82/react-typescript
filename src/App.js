@@ -3,6 +3,7 @@ import './App.css';
 import {BrowserRouter as Router, NavLink, Redirect} from 'react-router-dom';
 import Route from 'react-router-dom/Route';
 
+// match.params.user: unclear
 const User = (params) => {
   return(
     <div>
