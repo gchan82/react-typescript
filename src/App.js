@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import {BrowserRouter as Router, NavLink, Redirect, Prompt} from 'react-router-dom';
+import { BrowserRouter as Router, NavLink, Redirect, Prompt } from 'react-router-dom';
 import Route from 'react-router-dom/Route';
 
 // match.params.user: unclear
-const User = ({username}) => {
-  return(
+const User = ({ username }) => {
+  return (
     <div>
       <h1> Welcome, {username}! </h1>
     </div>
@@ -13,7 +13,7 @@ const User = ({username}) => {
 }
 
 class App extends Component {
-  state ={
+  state = {
     loggedIn: false
   }
   handleClick = () => {
@@ -23,40 +23,46 @@ class App extends Component {
   }
   render() {
     return (
-<Router>
-  <div>
-    <ul>
-      <li><NavLink exact to="/" activeStyle={{color: 'green'}}>Home</NavLink></li>
-      <li><NavLink exact to="/about" activeStyle={{color: 'green'}}>About</NavLink></li>
-      <li><NavLink exact to="/user/John" activeStyle={{color: 'green'}}>John</NavLink></li>
-      <li><NavLink exact to="/user/Joe" activeStyle={{color: 'green'}}>Joe</NavLink></li>
-    </ul>
+      <Router>
+        <div>
+          <ul>
+            <li><NavLink exact to="/" activeStyle={{ color: 'green' }}>Home</NavLink></li>
+            <li><NavLink exact to="/about" activeStyle={{ color: 'green' }}>About</NavLink></li>
+            <li><NavLink exact to="/user/John" activeStyle={{ color: 'green' }}>John</NavLink></li>
+            <li><NavLink exact to="/user/Joe" activeStyle={{ color: 'green' }}>Joe</NavLink></li>
+          </ul>
 
-    <Prompt
-when={!this.state.loggedIn}
-message={(location) => {
-  return location.pathname.startsWith('/user') ? 'You are not logged in. Please login to access.' : true
-}}
+          <Prompt
+            when={!this.state.loggedIn}
+            message={(location) => {
+             return location.pathname.startsWith('/user') ? 'You are not logged in. Please login to access.' : true
+            }}
 
-    />
+          />
 
-    
-  
-<input type="button" value={this.state.loggedIn ? 'log out' : 'login'} onClick={this.handleClick}></input>
+          {/* documentation:
+(location) => {
+  return location.pathname.startsWith('/user')
+  :prompts only in /user route. Prevents 2nd prompt again when re-routing to home page.
 
-    <Route exact path="/" render={() => {
-      return (
-      <div>
-        <h1>Welcome Home!</h1>
-      </div>
-      )
-    }} />
-    <Route exact path="/about" render={() => {return <h1>About Page</h1>}} />
-    <Route exact path="/user/:id" render={({match}) => (
-      this.state.loggedIn ? <User username={match.params.id} /> : <Redirect to="/" />
-    )}></Route>
-  </div>
-</Router>
+*/}
+
+
+          <input type="button" value={this.state.loggedIn ? 'log out' : 'login'} onClick={this.handleClick}></input>
+
+          <Route exact path="/" render={() => {
+            return (
+              <div>
+                <h1>Welcome Home!</h1>
+              </div>
+            )
+          }} />
+          <Route exact path="/about" render={() => { return <h1>About Page</h1> }} />
+          <Route exact path="/user/:id" render={({ match }) => {
+            return this.state.loggedIn ? <User username={match.params.id} /> : <Redirect to="/" />
+          }}></Route>
+        </div>
+      </Router>
     )
   }
 }
