@@ -49,7 +49,7 @@ class App extends Component {
 
           <input type="button" value={this.state.loggedIn ? 'log out' : 'login'} onClick={this.handleClick}></input>
           <hr></hr>
-          <button value={this.state.loggedIn ? 'log out' : 'login'} onClick={this.handleClick}>Click me</button>
+          <button onClick={this.handleClick}>{this.state.loggedIn ? 'log out' : 'login'}</button>
           <br></br>
           {this.state.loggedIn ? 'You are logged in' : 'You are logged out'}
 
