@@ -35,7 +35,7 @@ class App extends Component {
           <Prompt
             when={!this.state.loggedIn}
             message={(location) => {
-             return location.pathname.startsWith('/user') ? 'You are not logged in. Please login to access.' : true
+              return location.pathname.startsWith('/user') ? 'You are not logged in. Please login to access.' : true
             }}
 
           />
@@ -44,11 +44,14 @@ class App extends Component {
 (location) => {
   return location.pathname.startsWith('/user')
   :prompts only in /user route. Prevents 2nd prompt again when re-routing to home page.
-
 */}
 
 
           <input type="button" value={this.state.loggedIn ? 'log out' : 'login'} onClick={this.handleClick}></input>
+          <hr></hr>
+          <button value={this.state.loggedIn ? 'log out' : 'login'} onClick={this.handleClick}>Click me</button>
+          <br></br>
+          {this.state.loggedIn ? 'You are logged in' : 'You are logged out'}
 
           <Route exact path="/" render={() => {
             return (
