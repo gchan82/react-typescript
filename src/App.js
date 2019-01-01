@@ -1,28 +1,52 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter as Router, NavLink, Redirect} from 'react-router-dom';
+import Route from 'react-router-dom/Route';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+const User = (params) => {
+  return(
+    <div>
+      <h1> Welcome, {params.username}! </h1>
+    </div>
+  )
 }
 
+class App extends Component {
+  state ={
+    loggedIn: false
+  }
+  handleClick = () => {
+    this.setState(prevState => ({
+      loggedIn: !prevState.loggedIn
+    }))
+  }
+  render() {
+    return (
+<Router>
+  <div>
+    <ul>
+      <li><NavLink exact to="/" activeStyle={{color: 'green'}}>Home</NavLink></li>
+      <li><NavLink exact to="/about" activeStyle={{color: 'green'}}>About</NavLink></li>
+      <li><NavLink exact to="/user/John" activeStyle={{color: 'green'}}>John</NavLink></li>
+      <li><NavLink exact to="/user/Joe" activeStyle={{color: 'green'}}>Joe</NavLink></li>
+    </ul>
+  
+<input type="button" value={this.state.loggedIn ? 'log out' : 'login'} onClick={this.handleClick}></input>
+
+    <Route exact path="/" render={() => {
+      return (
+      <div>
+        <h1>Welcome Home!</h1>
+      </div>
+      )
+    }} />
+    <Route exact path="/about" render={() => {return <h1>About Page</h1>}} />
+    <Route exact path="/user/:username" render={({match}) => (
+      this.state.loggedIn ? <User username={match.params.username} /> : <Redirect to="/" />
+    )}></Route>
+  </div>
+</Router>
+    )
+  }
+}
 export default App;
