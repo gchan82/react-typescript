@@ -1,72 +1,54 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter as Router, NavLink, Redirect, Prompt } from 'react-router-dom';
-import Route from 'react-router-dom/Route';
-
-// match.params.user: unclear
-const User = ({ username }) => {
-  return (
-    <div>
-      <h1> Welcome, {username}! </h1>
-    </div>
-  )
-}
 
 class App extends Component {
-  state = {
-    loggedIn: false
+
+  onClick = () => {
+    console.log(this.firstName.value);
+    console.log(this.lastName.value);
+    console.log(this.age.value);
   }
-  handleClick = () => {
-    this.setState(prevState => ({
-      loggedIn: !prevState.loggedIn
-    }))
+  onKeyUp = (target, e) => {
+    console.log(e.keyCode);
+    if (e.keyCode === 13) {
+      switch (target) {
+        case 'firstName':
+          this.lastName.focus();
+          break;
+        case 'lastName':
+          this.age.focus();
+          break;
+        case 'age':
+          this.submit.focus();
+          break;
+        default:
+          this.firstName.focus();
+          break;
+      }
+    }
   }
   render() {
     return (
-      <Router>
+      <div className="App">
         <div>
-          <ul>
-            <li><NavLink exact to="/" activeStyle={{ color: 'green' }}>Home</NavLink></li>
-            <li><NavLink exact to="/about" activeStyle={{ color: 'green' }}>About</NavLink></li>
-            <li><NavLink exact to="/user/John" activeStyle={{ color: 'green' }}>John</NavLink></li>
-            <li><NavLink exact to="/user/Joe" activeStyle={{ color: 'green' }}>Joe</NavLink></li>
-          </ul>
+          <span>First name:</span>
+          <input ref={(input) => { this.firstName = input }} onKeyUp={this.onKeyUp.bind(this, 'firstName')} type="text" />
 
-          <Prompt
-            when={!this.state.loggedIn}
-            message={(location) => {
-              return location.pathname.startsWith('/user') ? 'You are not logged in. Please login to access.' : true
-            }}
-
-          />
-
-          {/* documentation:
-(location) => {
-  return location.pathname.startsWith('/user')
-  :prompts only in /user route. Prevents 2nd prompt again when re-routing to home page.
-*/}
-
-
-          <input type="button" value={this.state.loggedIn ? 'log out' : 'login'} onClick={this.handleClick}></input>
-          <hr></hr>
-          <button onClick={this.handleClick}>{this.state.loggedIn ? 'log out' : 'login'}</button>
-          <br></br>
-          {this.state.loggedIn ? 'You are logged in' : 'You are logged out'}
-
-          <Route exact path="/" render={() => {
-            return (
-              <div>
-                <h1>Welcome Home!</h1>
-              </div>
-            )
-          }} />
-          <Route exact path="/about" render={() => { return <h1>About Page</h1> }} />
-          <Route exact path="/user/:id" render={({ match }) => {
-            return this.state.loggedIn ? <User username={match.params.id} /> : <Redirect to="/" />
-          }}></Route>
         </div>
-      </Router>
+        <div>
+          <span>Last name:</span>
+          <input type="text" ref={(input) => { this.lastName = input }} onKeyUp={this.onKeyUp.bind(this, 'lastName')} />
+        </div>
+        <div>
+          <span>Age:</span>
+          <input type="text" ref={(input) => { this.age = input }} onKeyUp={this.onKeyUp.bind(this, 'age')} />
+        </div>
+        <div>
+          <input type="submit" value="submit" ref={(input) => { this.submit = input }} onClick={this.onClick} onKeyUp={this.onKeyUp.bind(this, 'submit')} />
+        </div>
+      </div>
     )
   }
 }
+
 export default App;
